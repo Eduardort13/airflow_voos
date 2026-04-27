@@ -1,0 +1,22 @@
+# Pastas de dados (Arquitetura Medalhão)
+include/bronze/
+include/silver/
+include/gold/
+
+# Astro CLI & Docker
+.astro/
+logs/
+.docker/
+
+# Python & Sistema
+__pycache__/
+*.pyc
+.env
+.DS_Store
+.venv/
+node_modules/
+
+# Airflow local (Astro cuida disso, não precisa subir)
+airflow_settings.yaml
+webserver_config.py
+unittests.cfg
