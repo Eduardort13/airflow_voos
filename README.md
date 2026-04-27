@@ -1,45 +1,57 @@
-Overview
-========
+# ✈️ Pipeline de Dados: Monitoramento de Tráfego Aéreo (OpenSky API)
 
-Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
+## 📌 Sobre o Projeto
+Este projeto desenvolve um pipeline de dados ponta a ponta (ETL) para monitorar informações de voos em tempo real utilizando a API pública do OpenSky Network. O objetivo é extrair, transformar e carregar (ETL) dados de aeronaves para análise de volume de voos e velocidades médias por país de origem.
 
-Project Contents
-================
+O projeto foi construído utilizando a **Arquitetura de Medalhão**, garantindo a rastreabilidade e a qualidade dos dados em cada etapa do processo.
 
-Your Astro project contains the following files and folders:
+---
 
-- dags: This folder contains the Python files for your Airflow DAGs. By default, this directory includes one example DAG:
-    - `example_astronauts`: This DAG shows a simple ETL pipeline example that queries the list of astronauts currently in space from the Open Notify API and prints a statement for each astronaut. The DAG uses the TaskFlow API to define tasks in Python, and dynamic task mapping to dynamically print a statement for each astronaut. For more on how this DAG works, see our [Getting started tutorial](https://www.astronomer.io/docs/learn/get-started-with-airflow).
-- Dockerfile: This file contains a versioned Astro Runtime Docker image that provides a differentiated Airflow experience. If you want to execute other commands or overrides at runtime, specify them here.
-- include: This folder contains any additional files that you want to include as part of your project. It is empty by default.
-- packages.txt: Install OS-level packages needed for your project by adding them to this file. It is empty by default.
-- requirements.txt: Install Python packages needed for your project by adding them to this file. It is empty by default.
-- plugins: Add custom or community plugins for your project to this file. It is empty by default.
-- airflow_settings.yaml: Use this local-only file to specify Airflow Connections, Variables, and Pools instead of entering them in the Airflow UI as you develop DAGs in this project.
+## 🏗️ Arquitetura do Pipeline (Medalhão)
 
-Deploy Your Project Locally
-===========================
+O fluxo de dados é organizado em três camadas principais:
 
-Start Airflow on your local machine by running 'astro dev start'.
+1.  **Camada Bronze (Raw):** Ingestão dos dados brutos diretamente da API OpenSky em formato JSON.
+2.  **Camada Silver (Trusted):** Limpeza e padronização dos dados, convertendo-os para CSV e tratando valores nulos ou inconsistentes.
+3.  **Camada Gold (Refined):** Agregação dos dados para calcular KPIs, como a velocidade média e a contagem de voos por país.
 
-This command will spin up five Docker containers on your machine, each for a different Airflow component:
 
-- Postgres: Airflow's Metadata Database
-- Scheduler: The Airflow component responsible for monitoring and triggering tasks
-- DAG Processor: The Airflow component responsible for parsing DAGs
-- API Server: The Airflow component responsible for serving the Airflow UI and API
-- Triggerer: The Airflow component responsible for triggering deferred tasks
 
-When all five containers are ready the command will open the browser to the Airflow UI at http://localhost:8080/. You should also be able to access your Postgres Database at 'localhost:5432/postgres' with username 'postgres' and password 'postgres'.
+---
 
-Note: If you already have either of the above ports allocated, you can either [stop your existing Docker containers or change the port](https://www.astronomer.io/docs/astro/cli/troubleshoot-locally#ports-are-not-available-for-my-local-airflow-webserver).
+## 🛠️ Tecnologias Utilizadas
 
-Deploy Your Project to Astronomer
-=================================
+* **Linguagem:** Python 3.13
+* **Orquestração:** Apache Airflow (via Astro CLI)
+* **Processamento de Dados:** Pandas
+* **Banco de Dados:** PostgreSQL (Containerizado via Docker)
+* **Infraestrutura:** Docker e WSL2 (Ubuntu)
+* **Visualização de Dados:** DBeaver
 
-If you have an Astronomer account, pushing code to a Deployment on Astronomer is simple. For deploying instructions, refer to Astronomer documentation: https://www.astronomer.io/docs/astro/deploy-code/
+---
 
-Contact
-=======
+## 🚀 Como Executar o Projeto
 
-The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support.
+### Pré-requisitos
+* Docker Desktop instalado.
+* Astro CLI instalado.
+
+### Passo a Passo
+1.  Clone o repositório:
+    ```bash
+    git clone [https://github.com/Eduardort13/projeto_airflow_voos.git](https://github.com/Eduardort13/projeto_airflow_voos.git)
+    ```
+2.  Inicie o ambiente do Airflow:
+    ```bash
+    astro dev start
+    ```
+3.  Acesse a interface do Airflow em `localhost:8080`.
+4.  Configure a conexão `postgres_default` no menu **Admin > Connections**.
+5.  Ative e execute a DAG `voos_pipeline`.
+
+---
+
+## 💡 Aprendizados e Desafios
+Este projeto demonstrou a importância da orquestração de containers e do gerenciamento de conexões em ambientes de engenharia de dados. Um dos principais desafios superados foi a configuração da persistência de dados em um banco de dados PostgreSQL local integrado ao ecossistema do Airflow, garantindo que o pipeline seja modular e escalável para outros *Data Warehouses* (como Snowflake).
+
+---
